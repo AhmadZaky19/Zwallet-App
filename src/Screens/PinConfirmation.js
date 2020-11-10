@@ -22,7 +22,7 @@ const PinConfirmation = ({navigation}) => {
   const transactionState = useSelector(
     (state) => state.transaction.transaction,
   );
-  const stateAuth = useSelector((state) => state.auth);
+  const stateAuth = useSelector((state) => state.auth.user.pin);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,7 +55,10 @@ const PinConfirmation = ({navigation}) => {
             buttonStyle={styles.buttonSubmit}
             titleStyle={styles.buttonSubmitText}
             onPress={() => {
-              if (Number(pin) !== Number(stateAuth.pin)) {
+              if (Number(pin) === Number(stateAuth)) {
+                navigation.navigate('TransferDetail');
+                dispatch(transaction(transactionState));
+              } else {
                 Alert.alert(
                   'Incorrect Pin',
                   'Please input correct pin',
@@ -66,9 +69,6 @@ const PinConfirmation = ({navigation}) => {
                   ],
                   {cancelable: true},
                 );
-              } else {
-                navigation.navigate('TransferDetail');
-                dispatch(transaction(transactionState));
               }
               // console.log(transaction);
             }}
